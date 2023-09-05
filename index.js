@@ -1,16 +1,19 @@
 const { Telegraf, Markup } = require('telegraf');
 const { message } = require('telegraf/filters');
 const { command } = require('./const');
-require('dotenv').config();
 const text = require('./const');
+require('dotenv').config();
 
-//6526173530:AAHFHWQ6yzHrOftiR_fZf4UxzXzaGa5fHr0
-
+// BOT_TOKEN = Заменить на токен вашего бота
 const bot = new Telegraf(process.env.BOT_TOKEN);
+
+//Бот стартует
 bot.start((ctx) => ctx.reply(`Привет ${ctx.message.from.first_name
      ? ctx.message.from.first_name : 'незнакомец'}!`));
+//Вывод всех команд которые находяться в const.js
 bot.help((ctx) => ctx.reply(text.command));
 
+//При вызове /course присылает текст и кнопки
 bot.command('course', (ctx)=> {
     ctx.replyWithHTML(`<b>Серия</b>`, Markup.inlineKeyboard(
         [
@@ -22,6 +25,7 @@ bot.command('course', (ctx)=> {
     ))
 })
 
+//Тут я назначаю кнопку по ее тегу btn_1 чтобы при нажатии на нее что-то происходило(Доделать)
 bot.action('btn_1', async (ctx) => {
     try {
         await ctx.answerCbQuery();
@@ -33,8 +37,9 @@ bot.action('btn_1', async (ctx) => {
     }
 })
 
+// launch запускает бот чтобы он вообще раюотал
 bot.launch();
 
-// Enable graceful stop
+//Завершает работу бота
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM')); 
